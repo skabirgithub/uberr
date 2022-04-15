@@ -129,6 +129,16 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                     options: MapOptions(
                       center: myLocation,
                       zoom: 18.0,
+                      onMapCreated: (omc){
+                        // _animatedMapMove(car1, 18.0);
+                        getMyLocation().whenComplete(() {
+                          setState(() {
+                            _animatedMapMove(myLocation, 18.0);
+                          });
+
+                        });
+
+                      }
 
                       // controller: mapController,
 
@@ -139,6 +149,8 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
                         urlTemplate:
                             "https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",
                         subdomains: ['a', 'b', 'c'],
+
+
                       ),
                       MarkerLayerOptions(markers: _markers,)
                     ],
@@ -284,11 +296,11 @@ class _HomepageState extends State<Homepage> with TickerProviderStateMixin {
 
     // Create a animation controller that has a duration and a TickerProvider.
     var controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
+        duration: const Duration(milliseconds: 1500), vsync: this);
     // The animation determines what path the animation will take. You can try different Curves values, although I found
     // fastOutSlowIn to be my favorite.
     Animation<double> animation =
-    CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+    CurvedAnimation(parent: controller, curve: Curves.fastLinearToSlowEaseIn);
 
     controller.addListener(() {
       mapController.move(
